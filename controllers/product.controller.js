@@ -84,3 +84,23 @@ exports.desNameProducts = async function (req, res, next) {
         Response.errorResponse('Error', res, error);
     }
 };
+
+exports.sortByNameandPrice = async function (req, res, next) {
+    try {
+        var priceQuery = req.query.price;
+        var nameQuery = req.query.name;
+
+        if (priceQuery) {
+            let sortProductsByPrice = await productSchemaModel.find().sort({ product_price: priceQuery });
+            Response.successResponse('Sorted Products by Price...!!', res, sortProductsByPrice);
+        }
+
+        if (nameQuery) {
+            let sortProductsByName = await productSchemaModel.find().sort({ product_name: nameQuery });
+            Response.successResponse('Sorted Products by Price...!!', res, sortProductsByName);
+        }
+    }
+    catch (error) {
+        Response.errorResponse("Error in Sorting..!", res, error);
+    }
+};
