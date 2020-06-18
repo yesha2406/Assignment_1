@@ -2,11 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 var productController = require('../controllers/product.controller');
-
-
+var checkAuth = require('../middleware/checkAuth');
 
 /* API for Insert Product. */
-router.post('/add-product-api', productController.newProduct);
+router.post('/add-product-api', checkAuth, productController.newProduct);
 
 /* API for Get all Products. */
 router.get('/get-all-products-api', productController.displayProducts);

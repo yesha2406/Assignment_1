@@ -1,17 +1,20 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+// var bodyParser=require('body-parser');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var mongoose = require('mongoose');
-var session = require('express-session');
 var expressLayouts = require('express-ejs-layouts');
+var dotenv = require('dotenv');
 
 var indexRouter = require('./routes/index');
 var productRouter = require('./routes/product');
 
 var app = express();
+
+dotenv.config();
 
 //DB Configuration
 var DB = require('./config/keys');
@@ -29,18 +32,11 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
+app.use('./uploads/', express.static('./uploads'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Express Session Middleware
-app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true,
-  cookie: { maxAge: 3600000 }
-}));
 
 app.use('/', indexRouter);
 app.use('/product', productRouter);
